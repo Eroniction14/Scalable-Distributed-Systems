@@ -15,30 +15,50 @@ provider "aws" {
   region     = "us-east-1" # Which region you are working on
 }
 
-# Your ec2 instance
-resource "aws_instance" "demo-instance" {
+# Your ec2 instance 1
+resource "aws_instance" "demo-instance-1" {
   ami                    = data.aws_ami.al2023.id
-  instance_type          = "t2.micro"
+  instance_type          = "t3.micro"
   iam_instance_profile   = "LabInstanceProfile"
   vpc_security_group_ids = [aws_security_group.ssh.id]
   key_name               = var.ssh_key_name
 
   tags = {
-    Name = "terraform-created-instance-:)"
+    Name = "terraform-instance-1"
+  }
+}
+
+# Your ec2 instance 2
+resource "aws_instance" "demo-instance-2" {
+  ami                    = data.aws_ami.al2023.id
+  instance_type          = "t3.micro"
+  iam_instance_profile   = "LabInstanceProfile"
+  vpc_security_group_ids = [aws_security_group.ssh.id]
+  key_name               = var.ssh_key_name
+
+  tags = {
+    Name = "terraform-instance-2"
   }
 }
 
 # Your security that grants ssh access from 
 # your ip address to your ec2 instance
 resource "aws_security_group" "ssh" {
-  name        = "allow_ssh_from_me"
-  description = "SSH from a single IP"
+  name        = "allow_ssh_and_http"
+  description = "SSH from a single IP and HTTP from anywhere"
   ingress {
     description = "SSH"
     from_port   = 22
     to_port     = 22
     protocol    = "tcp"
     cidr_blocks = [var.ssh_cidr]
+  }
+  ingress {
+    description = "HTTP"
+    from_port   = 8080
+    to_port     = 8080
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
   }
   egress {
     from_port   = 0
@@ -58,6 +78,18 @@ data "aws_ami" "al2023" {
   }
 }
 
-output "ec2_public_dns" {
-  value = aws_instance.demo-instance.public_dns
+output "ec2_public_dns_1" {
+  value = aws_instance.demo-instance-1.public_dns
+}
+
+output "ec2_public_dns_2" {
+  value = aws_instance.demo-instance-2.public_dns
+}
+
+output "ec2_public_ip_1" {
+  value = aws_instance.demo-instance-1.public_ip
+}
+
+output "ec2_public_ip_2" {
+  value = aws_instance.demo-instance-2.public_ip
 }
