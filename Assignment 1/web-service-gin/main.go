@@ -65,7 +65,7 @@ func main() {
 
 	port := os.Getenv("PORT")
 	if port == "" {
-		port = "8080"
+		port = "8080" //changed from localhost to 8080 for HW3
 	}
 	router.Run(":" + port)
 }
