@@ -1,0 +1,20 @@
+# Terraform
+terraform/.terraform/
+terraform/terraform.tfstate
+terraform/terraform.tfstate.backup
+terraform/*.tfvars
+terraform/.terraform.lock.hcl
+
+# Python
+__pycache__/
+*.pyc
+
+# Test files
+terraform/product.json
+product.json
+bad_product.json
+
+# Sensitive
+.env
+*.pem
+*.key
