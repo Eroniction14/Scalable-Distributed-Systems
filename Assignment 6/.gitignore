@@ -1,0 +1,3 @@
+echo "__pycache__/" > .gitignore
+echo "terraform/.terraform/" >> .gitignore
+echo "terraform/.terraform.tfstate.lock.info" >> .gitignore
