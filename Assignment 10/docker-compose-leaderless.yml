@@ -1,0 +1,83 @@
+# docker-compose-leaderless.yml
+# Place this file at the root of ASSIGNMENT 9
+# Usage: docker compose -f docker-compose-leaderless.yml up --build
+
+services:
+  node1:
+    build:
+      context: ./leaderless
+      dockerfile: Dockerfile
+    container_name: node1
+    environment:
+      - NODE_ADDR=node1:8080
+      - PEERS=node2:8080,node3:8080,node4:8080,node5:8080
+      - N=5
+      - PORT=8080
+    ports:
+      - "9001:8080"
+    networks:
+      - kvnet
+
+  node2:
+    build:
+      context: ./leaderless
+      dockerfile: Dockerfile
+    container_name: node2
+    environment:
+      - NODE_ADDR=node2:8080
+      - PEERS=node1:8080,node3:8080,node4:8080,node5:8080
+      - N=5
+      - PORT=8080
+    ports:
+      - "9002:8080"
+    networks:
+      - kvnet
+
+  node3:
+    build:
+      context: ./leaderless
+      dockerfile: Dockerfile
+    container_name: node3
+    environment:
+      - NODE_ADDR=node3:8080
+      - PEERS=node1:8080,node2:8080,node4:8080,node5:8080
+      - N=5
+      - PORT=8080
+    ports:
+      - "9003:8080"
+    networks:
+      - kvnet
+
+  node4:
+    build:
+      context: ./leaderless
+      dockerfile: Dockerfile
+    container_name: node4
+    environment:
+      - NODE_ADDR=node4:8080
+      - PEERS=node1:8080,node2:8080,node3:8080,node5:8080
+      - N=5
+      - PORT=8080
+    ports:
+      - "9004:8080"
+    networks:
+      - kvnet
+
+  node5:
+    build:
+      context: ./leaderless
+      dockerfile: Dockerfile
+    container_name: node5
+    environment:
+      - NODE_ADDR=node5:8080
+      - PEERS=node1:8080,node2:8080,node3:8080,node4:8080
+      - N=5
+      - PORT=8080
+    ports:
+      - "9005:8080"
+    networks:
+      - kvnet
+
+networks:
+  kvnet:
+    driver: bridge

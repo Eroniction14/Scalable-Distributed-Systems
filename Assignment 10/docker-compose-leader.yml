@@ -1,0 +1,74 @@
+# docker-compose-leader.yml
+# Usage:
+#   W=5 R=1:  W=5 R=1 docker compose -f docker-compose-leader.yml up --build
+#   W=1 R=5:  W=1 R=5 docker compose -f docker-compose-leader.yml up --build
+#   W=3 R=3:  W=3 R=3 docker compose -f docker-compose-leader.yml up --build
+
+services:
+  leader:
+    build: .
+    container_name: leader
+    environment:
+      - ROLE=leader
+      - NODE_ADDR=leader:8080
+      - FOLLOWERS=follower1:8080,follower2:8080,follower3:8080,follower4:8080
+      - W=${W:-5}
+      - R=${R:-1}
+      - N=5
+      - PORT=8080
+    ports:
+      - "8080:8080"
+    networks:
+      - kvnet
+
+  follower1:
+    build: .
+    container_name: follower1
+    environment:
+      - ROLE=follower
+      - NODE_ADDR=follower1:8080
+      - PORT=8080
+    ports:
+      - "8081:8080"
+    networks:
+      - kvnet
+
+  follower2:
+    build: .
+    container_name: follower2
+    environment:
+      - ROLE=follower
+      - NODE_ADDR=follower2:8080
+      - PORT=8080
+    ports:
+      - "8082:8080"
+    networks:
+      - kvnet
+
+  follower3:
+    build: .
+    container_name: follower3
+    environment:
+      - ROLE=follower
+      - NODE_ADDR=follower3:8080
+      - PORT=8080
+    ports:
+      - "8083:8080"
+    networks:
+      - kvnet
+
+  follower4:
+    build: .
+    container_name: follower4
+    environment:
+      - ROLE=follower
+      - NODE_ADDR=follower4:8080
+      - PORT=8080
+    ports:
+      - "8084:8080"
+    networks:
+      - kvnet
+
+networks:
+  kvnet:
+    driver: bridge
